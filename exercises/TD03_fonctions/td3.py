@@ -1,5 +1,8 @@
 #temps[0] : jours, temps[1]: heures, temps[2]: minutes, temps[3]: secondes
 
+from typing import Counter
+
+
 def tempsEnSeconde(temps):
     """ Renvoie la valeur en seconde de temps donné comme jour, heure, minute, seconde."""
     seconde = temps[0] * 24 * 60 ** 2 + temps[1] * 60 ** 2 + temps[2] * 60 + temps[3]
@@ -73,16 +76,60 @@ def tempsEnDate(temps):
     global date
     année = 1970
     if temps[0] >= 365 :
+        jours = temps[0] % 365 + 1
+        année = temps[0] // 365 + 1970
+    date = (année, jours, temps[1], temps[2], temps[3])
+    return date
+
+def afficheDate(temps) :
+    global date
+    tempsEnDate(temps)
+    return date
+temps = secondeEnTemps(1000000000)
+afficheTemps(temps)
+afficheDate(tempsEnDate(temps))
+afficheDate(temps)
+
+def bisextile(jour):
+    année_bisextile = 2020
+    global count
+    count = 0
+    for i in range(jour) :
+        i = 2020 + i
+        if i % 4 == 0 and i % 100 != 0 or i % 400 == 0 :
+            print(i)
+            count += 1
+    return count
+        
+bisextile(20000)
+
+def nombreBisextile(jour):
+    global count
+    bisextile(jour)
+    return count
+
+def tempsEnDateBisextile(temps):
+    global date
+    année = 1970
+    if temps[0] >= 366 :
         jours = temps[0] // 365
         année = temps[0] % 365 + 1970
     date = (année, jours, temps[1], temps[2], temps[3])
     return date
-
-def afficheDate(date = -1) :
-    print("années", date[0], " jours", date[1], " heures", date[2], " minutes", date[3], " secondes", date[4])
-    if date[0] > 0 and date[0] < 1 :
+   
 temps = secondeEnTemps(1000000000)
 afficheTemps(temps)
-#afficheDate(tempsEnDate(temps))
-#afficheDate()
-tempsEnDate(temps)
+afficheDate(tempsEnDateBisextile(temps))
+
+def verifie(liste_temps):
+    mois1 = liste_temps[0][0] + liste_temps[0][1] + liste_temps[0][2] + liste_temps[0][3]
+    mois2 = liste_temps[1][0] + liste_temps[1][1] + liste_temps[1][2] + liste_temps[1][3]
+    mois3 = liste_temps[2][0] + liste_temps[2][1] + liste_temps[2][2] + liste_temps[2][3]
+    mois4 = liste_temps[3][0] + liste_temps[3][1] + liste_temps[3][2] + liste_temps[3][3]
+    if mois1 <= 140 and mois2 <= 140 and mois3 <= 140 and mois4 <= 140 :
+        print("Ok.")
+    else :
+        print("Trop d'heures au total")
+
+liste_temps = [[1,2,39,34],[0,1,9,4],[0,29,39,51],[0,31,13,46]]
+verifie(liste_temps)
